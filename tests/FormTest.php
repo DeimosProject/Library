@@ -13,6 +13,7 @@ class FormTest extends PHPUnit_Framework_TestCase
     public function testPhoneStrEmpty()
     {
 
+        $this->assertEquals()
         $this->assertNotTrue(Form::is_phone(""));
 
     }

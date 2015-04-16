@@ -13,11 +13,19 @@ class Form
      */
     public static function is_phone($string)
     {
-        if (isset(self::$_cache['phone'][$string]))
-            return self::$_cache['phone'][$string];
+
+        if (isset(self::$_cache['is_phone'][$string]))
+            return self::$_cache['is_phone'][$string];
+
         self::$_cache['phone'][$string] = preg_replace(self::$regx_phone, '', $string);
-        $length = strlen(self::$_cache['phone'][$string]);
-        return $length == 10 || $length == 11;
+
+        self::$_cache['is_phone'][$string] = strlen(self::$_cache['phone'][$string]);
+
+        $is_equal_10 = self::$_cache['is_phone'][$string] == 10;
+        $is_equal_11 = self::$_cache['is_phone'][$string] == 11;
+
+        return $is_equal_10 || $is_equal_11;
+
     }
 
     /**
@@ -26,10 +34,13 @@ class Form
      */
     public static function phone($string)
     {
+
         if (isset(self::$_cache['phone'][$string]))
             return self::$_cache['phone'][$string];
+
         self::$_cache['phone'][$string] = preg_replace(self::$regx_phone, '', $string);
         return self::$_cache['phone'][$string];
+
     }
 
 }
