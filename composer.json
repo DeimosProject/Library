@@ -1,0 +1,12 @@
+{
+  "name": "Yaruga/Library",
+  "description": "Libraries for PHP",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "REZ1DENT3",
+      "email": "maksim.babichev95@gmail.com"
+    }
+  ]
+}
