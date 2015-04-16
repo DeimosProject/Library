@@ -5,7 +5,9 @@ class Form
 
     protected static $_cache = array();
 
-    private static $regx_phone = '/[^\d]/i';
+    private static $regxs = array(
+        'phone' => '/[^\d]/i'
+    );
 
     /**
      * @param string $string
@@ -14,17 +16,17 @@ class Form
     public static function is_phone($string)
     {
 
+        if (empty($string))
+            return false;
+
         if (isset(self::$_cache['is_phone'][$string]))
             return self::$_cache['is_phone'][$string];
 
-        self::$_cache['phone'][$string] = preg_replace(self::$regx_phone, '', $string);
+        $phone = self::phone($string);
 
-        self::$_cache['is_phone'][$string] = strlen(self::$_cache['phone'][$string]);
-
-        $is_equal_10 = self::$_cache['is_phone'][$string] == 10;
-        $is_equal_11 = self::$_cache['is_phone'][$string] == 11;
-
-        return $is_equal_10 || $is_equal_11;
+        $is_phone = &self::$_cache['is_phone'][$string];
+        $is_phone = strlen($phone) == 11;
+        return $is_phone;
 
     }
 
@@ -35,11 +37,28 @@ class Form
     public static function phone($string)
     {
 
+        if (empty($string))
+            return '';
+
         if (isset(self::$_cache['phone'][$string]))
             return self::$_cache['phone'][$string];
 
-        self::$_cache['phone'][$string] = preg_replace(self::$regx_phone, '', $string);
-        return self::$_cache['phone'][$string];
+        $phone = &self::$_cache['phone'][$string];
+        $phone = preg_replace(self::$regxs['phone'], '', $string);
+
+        $length = strlen($phone);
+        switch ($length) {
+            case 10:
+                $phone = 7 . $phone;
+                break;
+            case 11:
+                $phone = 7 . substr($phone, 1);
+                break;
+            default:
+                $phone = '';
+        }
+
+        return $phone;
 
     }
 
