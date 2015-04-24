@@ -1,65 +1,135 @@
 <?php
 
-class Form
+class Element_Form extends Library
 {
 
-    protected static $_cache = array();
-
-    private static $regxs = array(
-        'phone' => '/[^\d]/i'
-    );
+    /**
+     * @var stdClass
+     */
+    private $_params;
 
     /**
-     * @param string $string
-     * @return bool
+     * @var string
      */
-    public static function is_phone($string)
+    public $expreg = null;
+
+    /**
+     * @param $name
+     * @param $data
+     */
+    public function __construct($name, $data)
     {
+        $this->_params = new \stdClass();
+        $this->_params->value = $data;
+        $this->_params->valid = true;
 
-        if (empty($string))
-            return false;
-
-        if (isset(self::$_cache['is_phone'][$string]))
-            return self::$_cache['is_phone'][$string];
-
-        $phone = self::phone($string);
-
-        $is_phone = &self::$_cache['is_phone'][$string];
-        $is_phone = strlen($phone) == 11;
-        return $is_phone;
-
+        $this->_params->valid = $this->__get('valid_' . $name);
     }
 
     /**
-     * @param string $string
-     * @return string
+     * @return bool
      */
-    public static function phone($string)
+    public function is_expreg()
     {
+        $length = mb_strlen($this->_params->value);
+        $bool = (bool)preg_match($this->expreg, $this->_params->value, $out);
+        $is_one = count($out) == 1;
+        $bool = $bool && $is_one;
+        if ($bool)
+            $bool = $length == mb_strlen($out[0]);
+        return $bool;
+    }
 
-        if (empty($string))
-            return '';
-
-        if (isset(self::$_cache['phone'][$string]))
-            return self::$_cache['phone'][$string];
-
-        $phone = &self::$_cache['phone'][$string];
-        $phone = preg_replace(self::$regxs['phone'], '', $string);
-
-        $length = strlen($phone);
-        switch ($length) {
-            case 10:
-                $phone = 7 . $phone;
-                break;
-            case 11:
-                $phone = 7 . substr($phone, 1);
-                break;
-            default:
-                $phone = '';
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function __get($method_valid)
+    {
+        $validator = preg_match('/^valid_/', $method_valid);
+        if ($validator) {
+            $method_valid = str_replace('valid_', 'is_', $method_valid);
+            if (method_exists($this, $method_valid)) {
+                $this->_params->valid = $this->$method_valid($this->_params->value);
+                if ($this->_params->valid) {
+                    $method_valid = str_replace('is_', '', $method_valid);
+                    if (method_exists($this, $method_valid)) {
+                        $this->_params->value = $this->$method_valid($this->_params->value);
+                    }
+                }
+                $this->_is_error = !$this->_params->valid;
+            }
+            return $this->_params->valid;
         }
+        return $this->_params->$method_valid;
+    }
 
-        return $phone;
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function __set($key, $value)
+    {
+        if ($key == 'value')
+            $this->_params->$key = $value;
+    }
 
+}
+
+class Form
+{
+
+    /**
+     * @var array
+     */
+    private $_data = array();
+
+    /**
+     * @var array
+     */
+    private $_row = array();
+
+    /**
+     * @param array $method
+     */
+    public function __construct($method = array(), $auto_validation = true)
+    {
+        $this->_data = $method;
+        if ($auto_validation) {
+            foreach($this->_data as $row => $testing) {
+                $this->$row->valid;
+            }
+        }
+    }
+
+    /**
+     * @param $name
+     * @return Element_Form
+     */
+    private function _init_row($name)
+    {
+        return new Element_Form($name, $this->_data[$name]);
+    }
+
+    public function is_valid()
+    {
+        $valid = true;
+        foreach ($this->_row as $row)
+            $valid = $valid && $row->valid;
+        return $valid;
+    }
+
+    /**
+     * @param $name
+     * @return null|Element_Form
+     */
+    public function __get($name)
+    {
+        if (!isset($this->_data[$name]))
+            return null;
+        if (!isset($this->_row[$name]))
+            $this->_row[$name] = $this->_init_row($name);
+        return $this->_row[$name];
     }
 
 }
