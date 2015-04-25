@@ -1,5 +1,7 @@
 <?php
 
+include_once "autoload.php";
+
 use Deimos\Form;
 
 $server_requerst = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;

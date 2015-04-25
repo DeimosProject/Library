@@ -1,5 +1,9 @@
 <?php
 
+include_once "../autoload.php";
+
+use Deimos\Form;
+use Deimos\Library;
 
 class FormTest extends PHPUnit_Framework_TestCase
 {
