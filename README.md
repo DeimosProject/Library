@@ -1,7 +1,7 @@
 # Library
 
 // FORM.PHP
-    <pre>
+    <code>
     <!DOCTYPE HTML>
     <html>
         <head>
@@ -30,7 +30,7 @@
             </form>
         </body>
     </html>
-    </pre>
+    </code>
 
 // INDEX.PHP
     <?php
