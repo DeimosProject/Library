@@ -294,7 +294,7 @@ class Form
      */
     public function get($name, $auto_init = false)
     {
-        if (isset($this->_data[$name])) {
+        if (!isset($this->_data[$name])) {
             if ($auto_init) {
                 $this->_data[$name] = null;
             }
