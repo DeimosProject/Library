@@ -162,6 +162,15 @@ class Element_Form
      * @param null|string $msg_error
      * @return bool
      */
+    public function validate_lastname($msg_error = null)
+    {
+        return $this->validate_name($msg_error);
+    }
+
+    /**
+     * @param null|string $msg_error
+     * @return bool
+     */
     public function validate_name($msg_error = null)
     {
         if (!$this->validate_length())
@@ -174,6 +183,15 @@ class Element_Form
             $this->msg_error = $msg_error;
 
         return $this->validate;
+    }
+
+    /**
+     * @param null|string $msg_error
+     * @return bool
+     */
+    public function validate_patronymic($msg_error = null)
+    {
+        return $this->validate_name($msg_error);
     }
 
     /**
