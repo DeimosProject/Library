@@ -14,12 +14,6 @@ class Library
         )
     );
 
-    /**
-     * @param $string
-     * @param int $len
-     * @param int $begin
-     * @return mixed|string
-     */
     public static function phone($string)
     {
 
@@ -36,11 +30,9 @@ class Library
         switch ($length) {
             case 10:
                 $char = substr($phone, 0, 1);
-                if ($char == 7 || $char == 8) {
+                $phone = 8 . $phone;
+                if ($char == 7) {
                     $phone = '';
-                }
-                else {
-                    $phone = 8 . $phone;
                 }
                 break;
             case 11:
@@ -54,10 +46,6 @@ class Library
 
     }
 
-    /**
-     * @param string $string
-     * @return bool
-     */
     public static function is_phone($string)
     {
 

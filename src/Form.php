@@ -4,12 +4,19 @@ class Element_Form extends Library
 {
 
     /**
-     * @var stdClass
+     * @var bool
      */
-    private $_params;
+    public $validate = true;
+
+    public $msg_error = null;
 
     /**
-     * @var string
+     * @var null|string
+     */
+    public $value = null;
+
+    /**
+     * @var null|string
      */
     public $expreg = null;
 
@@ -17,61 +24,115 @@ class Element_Form extends Library
      * @param $name
      * @param $data
      */
-    public function __construct($name, $data)
+    public function __construct($name, $data, $msg_error)
     {
-        $this->_params = new \stdClass();
-        $this->_params->value = $data;
-        $this->_params->valid = true;
+        $this->value = $data;
 
-        $this->_params->valid = $this->__get('valid_' . $name);
+        if (method_exists($this, 'validate_' . $name))
+            $this->{'validate_' . $name}();
     }
 
-    /**
-     * @return bool
-     */
-    public function is_expreg()
+    public function validate_numberic()
     {
-        $length = mb_strlen($this->_params->value);
-        $bool = (bool)preg_match($this->expreg, $this->_params->value, $out);
+        return $this->validate_number();
+    }
+
+    public function validate_number()
+    {
+        $this->validate = is_numeric($this->value);
+        return $this->validate;
+    }
+
+    public function validate_length($min = 1, $max = null)
+    {
+        if ($this->value == null)
+            return $this->validate = false;
+
+        $bool = true;
+        $length = mb_strlen($this->value);
+
+        if (is_numeric($max))
+            $bool = $length <= $max;
+
+        $this->validate = $length >= $min && $bool;
+        return $this->validate;
+    }
+
+    public function validate_expreg()
+    {
+        if (!$this->validate_length())
+            return $this->validate;
+
+        $length = mb_strlen($this->value);
+        $bool = (bool)preg_match($this->expreg, $this->value, $out);
         $is_one = count($out) == 1;
         $bool = $bool && $is_one;
+
         if ($bool)
             $bool = $length == mb_strlen($out[0]);
+
         return $bool;
     }
 
-    /**
-     * @param $key
-     * @return mixed
-     */
-    public function __get($method_valid)
+    public function validate_email($msg_error = null)
     {
-        $validator = preg_match('/^valid_/', $method_valid);
-        if ($validator) {
-            $method_valid = str_replace('valid_', 'is_', $method_valid);
-            if (method_exists($this, $method_valid)) {
-                $this->_params->valid = $this->$method_valid($this->_params->value);
-                if ($this->_params->valid) {
-                    $method_valid = str_replace('is_', '', $method_valid);
-                    if (method_exists($this, $method_valid)) {
-                        $this->_params->value = $this->$method_valid($this->_params->value);
-                    }
-                }
-                $this->_is_error = !$this->_params->valid;
-            }
-            return $this->_params->valid;
-        }
-        return $this->_params->$method_valid;
+        if (!$this->validate_length())
+            return $this->validate;
+
+        $this->validate = parent::is_email($this->value);
+        if (!$this->validate && $msg_error != null)
+            $this->msg_error = $msg_error;
+
+        return $this->validate;
     }
 
-    /**
-     * @param $key
-     * @param $value
-     */
-    public function __set($key, $value)
+    public function validate_name($msg_error = null)
     {
-        if ($key == 'value')
-            $this->_params->$key = $value;
+        if (!$this->validate_length())
+            return $this->validate;
+
+        $this->validate = parent::is_name($this->value);
+        if (!$this->validate && $msg_error != null)
+            $this->msg_error = $msg_error;
+
+        return $this->validate;
+    }
+
+    public function validate_phone($msg_error = null)
+    {
+        if (!$this->validate_length())
+            return $this->validate;
+
+        $this->value = parent::phone($this->value);
+        $this->validate = parent::is_phone($this->value);
+        if (!$this->validate && $msg_error != null)
+            $this->msg_error = $msg_error;
+
+        return $this->validate;
+    }
+
+    public function validate_date($msg_error = null)
+    {
+        if (!$this->validate_length())
+            return $this->validate;
+
+        $this->validate = parent::is_date($this->value);
+        if (!$this->validate && $msg_error != null)
+            $this->msg_error = $msg_error;
+
+        return $this->validate;
+    }
+
+    public function validate_datetime($msg_error = null)
+    {
+        if (!$this->validate_length())
+            return $this->validate;
+
+        $this->validate = parent::is_datetime($this->value);
+        if (!$this->validate && $msg_error != null)
+            $this->msg_error = $msg_error;
+
+        return $this->validate;
     }
 
 }
@@ -95,11 +156,9 @@ class Form
     public function __construct($method = array(), $auto_validation = true)
     {
         $this->_data = $method;
-        if ($auto_validation) {
-            foreach($this->_data as $row => $testing) {
-                $this->$row->valid;
-            }
-        }
+        if ($auto_validation)
+            foreach($this->_data as $name => $value)
+                $this->get($name);
     }
 
     /**
@@ -108,14 +167,15 @@ class Form
      */
     private function _init_row($name)
     {
-        return new Element_Form($name, $this->_data[$name]);
+        return new Element_Form($name, $this->_data[$name], null);
     }
 
-    public function is_valid()
+    public function is_validate()
     {
         $valid = true;
-        foreach ($this->_row as $row)
-            $valid = $valid && $row->valid;
+        foreach ($this->_row as $name => $row) {
+            $valid = $valid && $row->validate;
+        }
         return $valid;
     }
 
@@ -123,13 +183,18 @@ class Form
      * @param $name
      * @return null|Element_Form
      */
-    public function __get($name)
+    public function get($name)
     {
         if (!isset($this->_data[$name]))
             return null;
         if (!isset($this->_row[$name]))
             $this->_row[$name] = $this->_init_row($name);
         return $this->_row[$name];
+    }
+
+    public function __get($name)
+    {
+        return $this->get($name);
     }
 
 }

@@ -2,23 +2,18 @@
 
 include_once "src/autoload.php";
 
-var_dump(Library::is_email("maksim.babichev95@gmail.com"));
-var_dump(Library::is_email("maksim-babichev95@gmail.com"));
-var_dump(Library::is_email("привет5@gmail.com"));
-var_dump(Library::is_email("Abc.example.com"));
-var_dump(Library::is_email("A@b@c@example.com"));
-var_dump(Library::is_email("a\"b(c)d,e:f;gi[j\\k]l@example.com"));
-var_dump(Library::is_email("just\"not\"right@example.com"));
+$server_requerst = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
 
-var_dump(Library::is_name('Максим'));
-var_dump(Library::is_name('Бабичев'));
+if ($server_requerst == 'POST') {
 
-var_dump(Library::is_name('Maxim'));
-var_dump(Library::is_name('Babichev'));
+    $form = new Form($_POST);
 
-var_dump(Library::is_name('Mаxim'));
-var_dump(Library::is_name('Bаbichev'));
+    $form->lastname->validate_name();
 
-$form = new Form($_GET);
-$form->lastname->valid_name;
-var_dump($form->is_valid());
+    include_once "form/Result.php";
+
+}
+else {
+
+    include_once "form/Form.php";
+}
