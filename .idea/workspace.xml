@@ -448,7 +448,7 @@
         <state vertical-scroll-proportion="0.70223755" vertical-offset="0" max-vertical-offset="581">
           <caret line="24" column="42" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
           <folding>
-            <element signature="e#40#56#0#PHP" expanded="true" />
+            <element signature="e#40#56#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
