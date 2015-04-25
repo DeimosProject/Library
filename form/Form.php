@@ -22,6 +22,14 @@
                 <label for="phone">Телефон</label>
                 <input id="phone" type="tel" name="phone" />
             </div>
+            <div>
+                <label for="password">Пароль</label>
+                <input id="password" type="password" name="password" />
+            </div>
+            <div>
+                <label for="password_confirm">Подтвердите</label>
+                <input id="password_confirm" type="password" name="password_confirm" />
+            </div>
             <input type="submit" value="Валидация" />
         </form>
     </body>

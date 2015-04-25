@@ -37,6 +37,30 @@ class Element_Form extends Library
         return $this->validate_number();
     }
 
+    public function validate_password()
+    {
+        $bool = $this->validate_length(8, 32);
+
+        $isset_char_lower = (bool)preg_match('/[а-яa-z]/u', $this->value);
+        $bool = $isset_char_lower && $bool;
+
+        $isset_char_upper = (bool)preg_match('/[А-ЯA-Z]/u', $this->value);
+        $bool = $isset_char_upper && $bool;
+
+        $isset_char_digits = (bool)preg_match('/\d/u', $this->value);
+        $bool = $isset_char_digits && $bool;
+
+        $this->validate = $bool;
+        return $this->validate;
+    }
+
+    public function validate_confirm(\Element_Form $element_form)
+    {
+        $bool = $this->validate && $element_form->validate;
+        $this->validate = $bool && $element_form->value == $this->value;
+        return $this->validate;
+    }
+
     public function validate_number()
     {
         $this->validate = is_numeric($this->value);
@@ -103,9 +127,11 @@ class Element_Form extends Library
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->value = parent::phone($this->value);
         $this->validate = parent::is_phone($this->value);
-        if (!$this->validate && $msg_error != null)
+        if ($this->validate) {
+            $this->value = parent::phone($this->value);
+        }
+        else if ($msg_error != null)
             $this->msg_error = $msg_error;
 
         return $this->validate;
@@ -156,9 +182,19 @@ class Form
     public function __construct($method = array(), $auto_validation = true)
     {
         $this->_data = $method;
-        if ($auto_validation)
-            foreach($this->_data as $name => $value)
+        if ($auto_validation) {
+            foreach ($this->_data as $name => $value) {
                 $this->get($name);
+
+                if (preg_match('/_confirm$/', $name)) {
+                    $_name = preg_replace('/_confirm$/', '', $name);
+                    if (isset($this->_row[$_name])) {
+                        $element = $this->get($_name);
+                        $this->get($name)->validate_confirm($element);
+                    }
+                }
+            }
+        }
     }
 
     /**
