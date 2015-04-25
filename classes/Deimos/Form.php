@@ -2,6 +2,10 @@
 
 namespace Deimos;
 
+/**
+ * Class Element_Form
+ * @package Deimos
+ */
 class Element_Form
 {
 
@@ -10,6 +14,9 @@ class Element_Form
      */
     public $validate = true;
 
+    /**
+     * @var null|string
+     */
     public $msg_error = null;
 
     /**
@@ -34,11 +41,19 @@ class Element_Form
             $this->{'validate_' . $name}();
     }
 
+    /**
+     * @return bool
+     */
     public function validate_numberic()
     {
         return $this->validate_number();
     }
 
+    /**
+     * @param int $min
+     * @param int $max
+     * @return bool
+     */
     public function validate_password($min = 8, $max = 32)
     {
         $bool = $this->validate_length($min, $max);
@@ -56,6 +71,10 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @param Element_Form $element_form
+     * @return bool
+     */
     public function validate_confirm(Element_Form $element_form)
     {
         $bool = $this->validate && $element_form->validate;
@@ -63,12 +82,20 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @return bool
+     */
     public function validate_number()
     {
         $this->validate = is_numeric($this->value);
         return $this->validate;
     }
 
+    /**
+     * @param int $min
+     * @param null|int $max
+     * @return bool
+     */
     public function validate_length($min = 1, $max = null)
     {
         if ($this->value == null)
@@ -84,6 +111,9 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @return bool
+     */
     public function validate_expreg()
     {
         if (!$this->validate_length())
@@ -100,6 +130,10 @@ class Element_Form
         return $bool;
     }
 
+    /**
+     * @param null|string $msg_error
+     * @return bool
+     */
     public function validate_email($msg_error = null)
     {
         if (!$this->validate_length())
@@ -112,6 +146,10 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @param null|string $msg_error
+     * @return bool
+     */
     public function validate_name($msg_error = null)
     {
         if (!$this->validate_length())
@@ -124,6 +162,10 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @param null|string $msg_error
+     * @return bool
+     */
     public function validate_phone($msg_error = null)
     {
         if (!$this->validate_length())
@@ -139,6 +181,10 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @param null|string $msg_error
+     * @return bool
+     */
     public function validate_date($msg_error = null)
     {
         if (!$this->validate_length())
@@ -151,6 +197,10 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @param null|string $msg_error
+     * @return bool
+     */
     public function validate_datetime($msg_error = null)
     {
         if (!$this->validate_length())
@@ -165,6 +215,10 @@ class Element_Form
 
 }
 
+/**
+ * Class Form
+ * @package Deimos
+ */
 class Form
 {
 
@@ -208,6 +262,9 @@ class Form
         return new Element_Form($name, $this->_data[$name], null);
     }
 
+    /**
+     * @return bool
+     */
     public function is_validate()
     {
         $valid = true;
