@@ -1,12 +1,27 @@
 {
-  "name": "Yaruga/Library",
-  "description": "Libraries for PHP",
-  "minimum-stability": "stable",
-  "license": "proprietary",
+  "name": "deimos/form-library",
+  "keywords": ["form", "validate", "validation", "validator"],
+  "description": "Validator form",
+  "homepage": "http://babichev.net",
+  "type": "library",
+  "license": "BSD",
   "authors": [
     {
-      "name": "REZ1DENT3",
-      "email": "maksim.babichev95@gmail.com"
+      "name": "Maxim Babichev",
+      "email": "maksim.babichev95@gmail.com",
+      "homepage": "http://babichev.net"
     }
-  ]
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "phpixie/orm": "2.*@dev"
+  },
+  "autoload": {
+    "psr-0": {"Deimos": "classes/"}
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.*-dev"
+    }
+  }
 }
