@@ -67,6 +67,9 @@ class Library
 
     public static function is_name($string)
     {
+        if (empty($string))
+            return false;
+
         $en = (bool)preg_match(self::$regxs['name']['en'], $string);
         $ru = (bool)preg_match(self::$regxs['name']['ru'], $string);
         return (bool)($en ^ $ru);
@@ -74,6 +77,9 @@ class Library
 
     public static function is_email($string)
     {
+        if (empty($string))
+            return false;
+
         $bool = (bool)preg_match(self::$regxs['email'], $string, $array_emails);
         $is_one = count($array_emails) == 1;
         $length_equal = false;
@@ -84,11 +90,17 @@ class Library
 
     public static function is_datetime($datetime)
     {
+        if (empty($datetime))
+            return false;
+
         return (bool)strtotime($datetime);
     }
 
     public static function is_date($date)
     {
+        if (empty($date))
+            return false;
+        
         return self::is_datetime($date);
     }
 
