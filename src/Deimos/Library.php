@@ -1,5 +1,7 @@
 <?php
 
+namespace Deimos;
+
 class Library
 {
 

@@ -6,7 +6,7 @@ $server_requerst = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'
 
 if ($server_requerst == 'POST') {
 
-    $form = new Form($_POST);
+    $form = new \Deimos\Form($_POST);
 
     $form->lastname->validate_name();
 

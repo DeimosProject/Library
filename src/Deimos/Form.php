@@ -1,6 +1,8 @@
 <?php
 
-class Element_Form extends Library
+namespace Deimos;
+
+class Element_Form
 {
 
     /**
@@ -37,9 +39,9 @@ class Element_Form extends Library
         return $this->validate_number();
     }
 
-    public function validate_password()
+    public function validate_password($min = 8, $max = 32)
     {
-        $bool = $this->validate_length(8, 32);
+        $bool = $this->validate_length($min, $max);
 
         $isset_char_lower = (bool)preg_match('/[а-яa-z]/u', $this->value);
         $bool = $isset_char_lower && $bool;
@@ -54,7 +56,7 @@ class Element_Form extends Library
         return $this->validate;
     }
 
-    public function validate_confirm(\Element_Form $element_form)
+    public function validate_confirm(Element_Form $element_form)
     {
         $bool = $this->validate && $element_form->validate;
         $this->validate = $bool && $element_form->value == $this->value;
@@ -103,7 +105,7 @@ class Element_Form extends Library
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->validate = parent::is_email($this->value);
+        $this->validate = Library::is_email($this->value);
         if (!$this->validate && $msg_error != null)
             $this->msg_error = $msg_error;
 
@@ -115,7 +117,7 @@ class Element_Form extends Library
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->validate = parent::is_name($this->value);
+        $this->validate = Library::is_name($this->value);
         if (!$this->validate && $msg_error != null)
             $this->msg_error = $msg_error;
 
@@ -127,9 +129,9 @@ class Element_Form extends Library
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->validate = parent::is_phone($this->value);
+        $this->validate = Library::is_phone($this->value);
         if ($this->validate) {
-            $this->value = parent::phone($this->value);
+            $this->value = Library::phone($this->value);
         }
         else if ($msg_error != null)
             $this->msg_error = $msg_error;
@@ -142,7 +144,7 @@ class Element_Form extends Library
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->validate = parent::is_date($this->value);
+        $this->validate = Library::is_date($this->value);
         if (!$this->validate && $msg_error != null)
             $this->msg_error = $msg_error;
 
@@ -154,7 +156,7 @@ class Element_Form extends Library
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->validate = parent::is_datetime($this->value);
+        $this->validate = Library::is_datetime($this->value);
         if (!$this->validate && $msg_error != null)
             $this->msg_error = $msg_error;
 
