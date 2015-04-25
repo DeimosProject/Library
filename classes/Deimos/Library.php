@@ -100,7 +100,7 @@ class Library
     {
         if (empty($date))
             return false;
-        
+
         return self::is_datetime($date);
     }
 

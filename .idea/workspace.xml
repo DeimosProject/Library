@@ -55,8 +55,8 @@
       <file leaf-file-name="Library.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/classes/Deimos/Library.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9122203" vertical-offset="1204" max-vertical-offset="1904">
-              <caret line="102" column="8" selection-start-line="102" selection-start-column="8" selection-end-line="102" selection-end-column="8" />
+            <state vertical-scroll-proportion="0.23407917" vertical-offset="0" max-vertical-offset="1904">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -524,8 +524,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/classes/Deimos/Library.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9122203" vertical-offset="1204" max-vertical-offset="1904">
-          <caret line="102" column="8" selection-start-line="102" selection-start-column="8" selection-end-line="102" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.23407917" vertical-offset="0" max-vertical-offset="1904">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
