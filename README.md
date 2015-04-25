@@ -2,12 +2,10 @@
 
 // FORM.PHP
 
-    <pre>
-        input id="lastname" type="text" name="lastname"
-        input id="name" type="text" name="name"
-        input id="email" type="text" name="email"
-        input id="phone" type="tel" name="phone"
-    </pre>
+    input id="lastname" type="text" name="lastname"
+    input id="name" type="text" name="name"
+    input id="email" type="text" name="email"
+    input id="phone" type="tel" name="phone"
 
 // INDEX.PHP
 
