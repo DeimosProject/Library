@@ -1,6 +1,7 @@
 # Library
 
 // FORM.PHP
+
     <pre>
         input id="lastname" type="text" name="lastname"
         input id="name" type="text" name="name"
@@ -9,7 +10,6 @@
     </pre>
 
 // INDEX.PHP
-    <?php
 
     include_once "src/autoload.php";
 
