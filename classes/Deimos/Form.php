@@ -281,6 +281,8 @@ class Form
      */
     public function is_validate()
     {
+        if (!count($this->_row))
+            return null;
         $valid = true;
         foreach ($this->_row as $name => $row) {
             $valid = $valid && $row->validate;
