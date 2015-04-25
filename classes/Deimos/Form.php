@@ -292,10 +292,17 @@ class Form
      * @param $name
      * @return null|Element_Form
      */
-    public function get($name)
+    public function get($name, $auto_init = false)
     {
-        if (!isset($this->_data[$name]))
-            return null;
+        if (isset($this->_data[$name])) {
+            if ($auto_init) {
+                $this->_data[$name] = null;
+            }
+            else {
+                return null;
+            }
+        }
+
         if (!isset($this->_row[$name]))
             $this->_row[$name] = $this->_init_row($name);
         return $this->_row[$name];
@@ -303,7 +310,7 @@ class Form
 
     public function __get($name)
     {
-        return $this->get($name);
+        return $this->get($name, true);
     }
 
 }
