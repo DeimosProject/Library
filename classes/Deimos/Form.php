@@ -71,6 +71,16 @@ class Element_Form
         return $this->validate;
     }
 
+    private function ucfirst($string)
+    {
+        if (empty($string))
+            return '';
+        $string = mb_strtolower($string);
+        $firstChar = mb_substr($string, 0, 1);
+        $then = mb_substr($string, 1);
+        return mb_strtoupper($firstChar) . $then;
+    }
+
     /**
      * @param Element_Form $element_form
      * @return bool
@@ -157,7 +167,7 @@ class Element_Form
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->value = ucfirst($this->value);
+        $this->value = $this->ucfirst($this->value);
 
         $this->validate = Library::is_name($this->value);
         if (!$this->validate && $msg_error != null)
