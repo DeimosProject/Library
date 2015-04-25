@@ -1,10 +1,10 @@
 # Library
 
 // FORM.PHP
-    input id="lastname" type="text" name="lastname"
-    input id="name" type="text" name="name"
-    input id="email" type="text" name="email"
-    input id="phone" type="tel" name="phone"
+    input id="lastname" type="text" name="lastname"<br/>
+    input id="name" type="text" name="name"<br/>
+    input id="email" type="text" name="email"<br/>
+    input id="phone" type="tel" name="phone"<br/>
 
 // INDEX.PHP
     <?php
