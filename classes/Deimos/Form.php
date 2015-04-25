@@ -139,6 +139,8 @@ class Element_Form
         if (!$this->validate_length())
             return $this->validate;
 
+        $this->value = mb_strtolower($this->value);
+
         $this->validate = Library::is_email($this->value);
         if (!$this->validate && $msg_error != null)
             $this->msg_error = $msg_error;
@@ -154,6 +156,8 @@ class Element_Form
     {
         if (!$this->validate_length())
             return $this->validate;
+
+        $this->value = ucfirst($this->value);
 
         $this->validate = Library::is_name($this->value);
         if (!$this->validate && $msg_error != null)
