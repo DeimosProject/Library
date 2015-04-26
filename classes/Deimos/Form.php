@@ -27,7 +27,7 @@ class Element_Form
     /**
      * @var null|string
      */
-    public $expreg = null;
+    public $regexp = null;
 
     /**
      * @var IDN
@@ -155,13 +155,19 @@ class Element_Form
     /**
      * @return bool
      */
-    public function validate_expreg()
+    public function validate_regexp()
     {
         if (!$this->validate_length())
             return $this->validate;
 
+        if (!$this->regexp)
+            return null;
+
+        if (!filter_var($this->regexp, FILTER_VALIDATE_REGEXP))
+            return null;
+
         $length = mb_strlen($this->value);
-        $bool = (bool)preg_match($this->expreg, $this->value, $out);
+        $bool = (bool)preg_match($this->regexp, $this->value, $out);
         $is_one = count($out) == 1;
         $bool = $bool && $is_one;
 
@@ -278,6 +284,9 @@ class Element_Form
         return $value;
     }
 
+    /**
+     * @return bool
+     */
     public function validate_domain()
     {
         if ($this->validate_url()) {
@@ -397,6 +406,10 @@ class Form
         return $this->_row[$name];
     }
 
+    /**
+     * @param $name
+     * @return Element_Form|null
+     */
     public function __get($name)
     {
         return $this->get($name, true);
