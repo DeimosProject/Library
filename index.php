@@ -1,5 +1,5 @@
 <?php
-
+mb_internal_encoding('utf-8');
 include_once "autoload.php";
 
 use Deimos\Form;
@@ -9,8 +9,6 @@ $server_requerst = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'
 if ($server_requerst == 'POST') {
 
     $form = new Form($_POST);
-
-    $form->lastname->validate_name();
 
     include_once "form/Result.php";
 

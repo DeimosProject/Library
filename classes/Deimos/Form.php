@@ -30,6 +30,11 @@ class Element_Form
     public $expreg = null;
 
     /**
+     * @var IDN
+     */
+    private $_idn = null;
+
+    /**
      * @param $name
      * @param $data
      */
@@ -71,10 +76,15 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @param $string
+     * @return string
+     */
     private function ucfirst($string)
     {
         if (empty($string))
             return '';
+
         $string = mb_strtolower($string);
         $firstChar = mb_substr($string, 0, 1);
         $then = mb_substr($string, 1);
@@ -107,7 +117,7 @@ class Element_Form
     public function checkbox_is_checked()
     {
         if (is_string($this->value))
-            return $this->value == 'on';
+            return filter_var($this->value, FILTER_VALIDATE_BOOLEAN);
         return null;
     }
 
@@ -167,12 +177,14 @@ class Element_Form
      */
     public function validate_email($msg_error = null)
     {
-        if (!$this->validate_length())
+        if (!$this->validate_length(3))
             return $this->validate;
 
         $this->value = mb_strtolower($this->value);
 
-        $this->validate = Library::is_email($this->value);
+        $value = $this->idn_encode();
+
+        $this->validate = (bool)filter_var($value, FILTER_VALIDATE_EMAIL);
         if (!$this->validate && $msg_error != null)
             $this->msg_error = $msg_error;
 
@@ -247,6 +259,31 @@ class Element_Form
         if (!$this->validate && $msg_error != null)
             $this->msg_error = $msg_error;
 
+        return $this->validate;
+    }
+
+    private function idn_encode()
+    {
+        if (extension_loaded('intl')) {
+            $value = idn_to_ascii($this->value);
+        }
+        else {
+            if (!$this->_idn)
+                $this->_idn = new IDN();
+            $value = $this->_idn->encode($this->value);
+        }
+        return $value;
+    }
+
+    /**
+     * @return bool|mixed
+     */
+    public function validate_url()
+    {
+        if (!$this->validate_length())
+            return $this->validate;
+
+        $this->validate = (bool)filter_var($this->idn_encode(), FILTER_VALIDATE_URL);
         return $this->validate;
     }
 

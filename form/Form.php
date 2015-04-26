@@ -23,6 +23,10 @@
                 <input id="phone" type="tel" name="phone" />
             </div>
             <div>
+                <label for="url">Ссылка</label>
+                <input id="url" type="text" name="url" />
+            </div>
+            <div>
                 <label for="password">Пароль</label>
                 <input id="password" type="password" name="password" />
             </div>

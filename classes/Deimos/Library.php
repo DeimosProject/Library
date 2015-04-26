@@ -9,7 +9,6 @@ class Library
 
     private static $regxs = array(
         'phone' => '/[^\d]/i',
-        'email' => '/[^@]{1,}[@]{1}[^@]{1,}/ui',
         'name' => array(
             'en' => '/[^a-z]/i',
             'ru' => '/[^а-я]/iu'
@@ -80,19 +79,6 @@ class Library
         if (empty($string))
             return false;
         return (bool)(self::is_lang_en($string) ^ self::is_lang_ru($string));
-    }
-
-    public static function is_email($string)
-    {
-        if (empty($string))
-            return false;
-
-        $bool = (bool)preg_match(self::$regxs['email'], $string, $array_emails);
-        $is_one = count($array_emails) == 1;
-        $length_equal = false;
-        if ($is_one)
-            $length_equal = mb_strlen($string) == mb_strlen($array_emails[0]);
-        return $bool && $length_equal;
     }
 
     public static function is_datetime($datetime)

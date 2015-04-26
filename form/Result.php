@@ -5,7 +5,7 @@ if (isset($form)) {
         var_dump('Данные введены корректно!');
     }
     else {
-        var_dump('Ошибка ввода данных');
+        var_dump($form);
     }
 }
 else {
