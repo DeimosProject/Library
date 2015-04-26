@@ -4,9 +4,6 @@ include_once "autoload.php";
 
 use Deimos\Form;
 
-$form = new Form(array('email' => '"()<>[]:,;@\\"!#$%&\'*+-/=?^_`{}| ~.a"@example.org'));
-var_dump($form);die;
-
 $server_requerst = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
 
 if ($server_requerst == 'POST') {
