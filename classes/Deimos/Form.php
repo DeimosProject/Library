@@ -262,6 +262,9 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @return string
+     */
     private function idn_encode()
     {
         if (extension_loaded('intl')) {
@@ -269,10 +272,18 @@ class Element_Form
         }
         else {
             if (!$this->_idn)
-                $this->_idn = new IDN();
+                $this->_idn = new IDN(mb_internal_encoding());
             $value = $this->_idn->encode($this->value);
         }
         return $value;
+    }
+
+    public function validate_domain()
+    {
+        if ($this->validate_url()) {
+            $this->value = parse_url($this->value, PHP_URL_HOST);
+        }
+        return $this->validate;
     }
 
     /**
