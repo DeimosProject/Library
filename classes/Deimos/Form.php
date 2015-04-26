@@ -184,7 +184,6 @@ class Element_Form
             return $this->validate;
 
         $this->value = mb_strtolower($this->value);
-        $this->value = addslashes($this->value);
 
         $value = $this->idn_encode();
 
