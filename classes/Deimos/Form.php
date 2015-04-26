@@ -163,9 +163,6 @@ class Element_Form
         if (!$this->regexp)
             return null;
 
-        if (!filter_var($this->regexp, FILTER_VALIDATE_REGEXP))
-            return null;
-
         $length = mb_strlen($this->value);
         $bool = (bool)preg_match($this->regexp, $this->value, $out);
         $is_one = count($out) == 1;
