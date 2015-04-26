@@ -65,14 +65,21 @@ class Library
 
     }
 
+    public static function is_lang_ru($string)
+    {
+        return (bool)preg_match(self::$regxs['name']['ru'], $string);
+    }
+
+    public static function is_lang_en($string)
+    {
+        return (bool)preg_match(self::$regxs['name']['en'], $string);
+    }
+
     public static function is_name($string)
     {
         if (empty($string))
             return false;
-
-        $en = (bool)preg_match(self::$regxs['name']['en'], $string);
-        $ru = (bool)preg_match(self::$regxs['name']['ru'], $string);
-        return (bool)($en ^ $ru);
+        return (bool)(self::is_lang_en($string) ^ self::is_lang_ru($string));
     }
 
     public static function is_email($string)

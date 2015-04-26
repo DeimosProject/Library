@@ -1,7 +1,7 @@
 <?php
 
 if (isset($form)) {
-    if ($form->is_validate()) {
+    if ($form->is_valid()) {
         var_dump('Данные введены корректно!');
     }
     else {

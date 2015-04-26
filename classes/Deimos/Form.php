@@ -102,6 +102,24 @@ class Element_Form
     }
 
     /**
+     * @return bool|null
+     */
+    public function checkbox_is_checked()
+    {
+        if (is_string($this->value))
+            return $this->value == 'on';
+        return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function validate_checkbox()
+    {
+        return $this->checkbox_is_checked() !== null;
+    }
+
+    /**
      * @param int $min
      * @param null|int $max
      * @return bool
@@ -111,7 +129,10 @@ class Element_Form
         if ($this->value == null)
             return $this->validate = false;
 
-        $bool = true;
+        if (is_string($this->value))
+            $this->value = trim($this->value);
+
+        $bool = !empty($this->value);
         $length = mb_strlen($this->value);
 
         if (is_numeric($max))
@@ -297,7 +318,7 @@ class Form
     /**
      * @return bool
      */
-    public function is_validate()
+    public function is_valid()
     {
         if (!count($this->_row))
             return null;
