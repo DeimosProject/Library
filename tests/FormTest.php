@@ -10,7 +10,6 @@ class FormTest extends PHPUnit_Framework_TestCase
 
     public function testEmailStrNotEmpty()
     {
-        mb_internal_encoding('utf-8');
         $emails = array(
             'почта@привет.мир' => true,
             'maksim.babichev95@gmail.com' => true,
@@ -33,7 +32,7 @@ class FormTest extends PHPUnit_Framework_TestCase
                 $this->assertTrue($f->is_valid());
             }
             else {
-                $this->assertNotTrue($f->is_valid());
+                $this->assertFalse($f->is_valid());
             }
         }
 

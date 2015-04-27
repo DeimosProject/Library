@@ -1,5 +1,5 @@
 <?php
-mb_internal_encoding('utf-8');
+
 include_once "autoload.php";
 
 use Deimos\Form;
