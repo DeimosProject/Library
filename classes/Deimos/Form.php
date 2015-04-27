@@ -321,8 +321,18 @@ class Element_Form
      */
     public function validate_domain()
     {
-        if ($this->validate_url()) {
-            $this->value = parse_url($this->value, PHP_URL_HOST);
+        $value = parse_url($this->value);
+        $this->validate = $value !== null;
+        if ($this->validate) {
+            if (isset($value['scheme'])) {
+                $this->value = $value['host'];
+            }
+            else {
+                $value = parse_url('http://' . $value['path']);
+                $this->validate = $value !== null && isset($value['host']);
+                if ($this->validate)
+                    $this->value = $value['host'];
+            }
         }
         return $this->validate;
     }
@@ -335,7 +345,17 @@ class Element_Form
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->validate = (bool)filter_var($this->idn_encode(), FILTER_VALIDATE_URL);
+        $value = $this->idn_encode();
+        $this->validate = (bool)filter_var($value, FILTER_VALIDATE_URL);
+        if (!$this->validate) {
+            $value = $this->idn_encode(2003);
+            $this->validate = (bool)filter_var($value, FILTER_VALIDATE_URL);
+            if (!$this->validate) {
+                $value = $this->idn_encode(2008);
+                $this->validate = (bool)filter_var($value, FILTER_VALIDATE_URL);
+            }
+        }
+
         return $this->validate;
     }
 
