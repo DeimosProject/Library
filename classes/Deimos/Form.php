@@ -332,7 +332,7 @@ class Element_Form
             $save_value = $this->value;
             if (isset($value['scheme'])) {
                 if ($this->validate_url()) {
-                    $this->value = $value['host'];
+                    $this->value = mb_strtolower($value['host']);
                 }
                 else {
                     $this->value = $save_value;
@@ -342,9 +342,9 @@ class Element_Form
                 $this->value = parse_url('http://' . $value['path']);
                 if ($this->validate_url()) {
                     $this->validate = $value !== null && isset($value['host']);
-                    if ($this->validate)
-                        $this->value = $value['host'];
-
+                    if ($this->validate) {
+                        $this->value = mb_strtolower($value['host']);
+                    }
                 }
                 else {
                     $this->value = $save_value;
