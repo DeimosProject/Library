@@ -256,9 +256,10 @@ class Element_Form
         if ($this->validate) {
             $value = $phone->getNationalNumber();
             $country_code = $phone->getCountryCode();
-            if (strtoupper($this->region_default) == 'RU' && $country_code == 7)
+            $is_ru = strtoupper($this->region_default) == 'RU';
+            if ($is_ru && $country_code == 7)
                 $country_code = 8;
-            if (strlen($value) == 10) {
+            if (!$is_ru || strlen($value) == 10) {
                 $this->value = $country_code . $value;
             }
             else {
