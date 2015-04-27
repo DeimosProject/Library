@@ -47,12 +47,20 @@ class Element_Form
     /**
      * @var array
      */
-    private $_messages = array();
+    private $_messages = array(
+        'is_null' => '',
+        'is_valid' => '',
+        'is_not_valid' => ''
+    );
 
     /**
-     * @var string
+     * @var array
      */
-    private $_css = '';
+    private $_css = array(
+        'is_null' => '',
+        'is_valid' => '',
+        'is_not_valid' => ''
+    );
 
     /**
      * @param $name
