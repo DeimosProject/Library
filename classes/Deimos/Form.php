@@ -191,6 +191,9 @@ class Element_Form
         return $bool;
     }
 
+    /**
+     * @return bool
+     */
     public function validate_email()
     {
         if (!$this->validate_length(3))
@@ -216,11 +219,17 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @return bool
+     */
     public function validate_lastname()
     {
         return $this->validate_name();
     }
 
+    /**
+     * @return bool
+     */
     public function validate_name()
     {
         if (!$this->validate_length())
@@ -233,11 +242,17 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @return bool
+     */
     public function validate_patronymic()
     {
         return $this->validate_name();
     }
 
+    /**
+     * @return bool
+     */
     public function validate_phone()
     {
         if (!$this->validate_length())
@@ -272,6 +287,9 @@ class Element_Form
         return $this->validate;
     }
 
+    /**
+     * @return bool
+     */
     public function validate_date()
     {
         if (!$this->validate_length())
