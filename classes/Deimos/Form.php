@@ -17,11 +17,6 @@ class Element_Form
     /**
      * @var null|string
      */
-    public $msg_error = null;
-
-    /**
-     * @var null|string
-     */
     public $value = null;
 
     /**
@@ -53,7 +48,7 @@ class Element_Form
      * @param $name
      * @param $data
      */
-    public function __construct($name, $data, $msg_error)
+    public function __construct($name, $data)
     {
         $this->value = $data;
 
@@ -194,11 +189,7 @@ class Element_Form
         return $bool;
     }
 
-    /**
-     * @param null|string $msg_error
-     * @return bool
-     */
-    public function validate_email($msg_error = null)
+    public function validate_email()
     {
         if (!$this->validate_length(3))
             return $this->validate;
@@ -220,26 +211,15 @@ class Element_Form
             }
         }
 
-        if (!$this->validate && $msg_error != null)
-            $this->msg_error = $msg_error;
-
         return $this->validate;
     }
 
-    /**
-     * @param null|string $msg_error
-     * @return bool
-     */
-    public function validate_lastname($msg_error = null)
+    public function validate_lastname()
     {
-        return $this->validate_name($msg_error);
+        return $this->validate_name();
     }
 
-    /**
-     * @param null|string $msg_error
-     * @return bool
-     */
-    public function validate_name($msg_error = null)
+    public function validate_name()
     {
         if (!$this->validate_length())
             return $this->validate;
@@ -247,26 +227,16 @@ class Element_Form
         $this->value = $this->ucfirst($this->value);
 
         $this->validate = Library::is_name($this->value);
-        if (!$this->validate && $msg_error != null)
-            $this->msg_error = $msg_error;
 
         return $this->validate;
     }
 
-    /**
-     * @param null|string $msg_error
-     * @return bool
-     */
-    public function validate_patronymic($msg_error = null)
+    public function validate_patronymic()
     {
-        return $this->validate_name($msg_error);
+        return $this->validate_name();
     }
 
-    /**
-     * @param null|string $msg_error
-     * @return bool
-     */
-    public function validate_phone($msg_error = null)
+    public function validate_phone()
     {
         if (!$this->validate_length())
             return $this->validate;
@@ -275,6 +245,8 @@ class Element_Form
 
         $value = preg_replace('/^[\d]/', '', $this->value);
 
+        var_dump($value);die;
+        
         $phone = $phoneUtil->parse($value, $this->region_default);
         $get_region_code = $phoneUtil->getRegionCodeForCountryCode($phone->getCountryCode());
 
@@ -287,18 +259,12 @@ class Element_Form
         return $this->validate;
     }
 
-    /**
-     * @param null|string $msg_error
-     * @return bool
-     */
-    public function validate_date($msg_error = null)
+    public function validate_date()
     {
         if (!$this->validate_length())
             return $this->validate;
 
         $this->validate = Library::is_date($this->value);
-        if (!$this->validate && $msg_error != null)
-            $this->msg_error = $msg_error;
 
         return $this->validate;
     }
@@ -391,14 +357,12 @@ class Element_Form
      * @param null|string $msg_error
      * @return bool
      */
-    public function validate_datetime($msg_error = null)
+    public function validate_datetime()
     {
         if (!$this->validate_length())
             return $this->validate;
 
         $this->validate = Library::is_datetime($this->value);
-        if (!$this->validate && $msg_error != null)
-            $this->msg_error = $msg_error;
 
         return $this->validate;
     }
@@ -449,7 +413,7 @@ class Form
      */
     private function _init_row($name)
     {
-        return new Element_Form($name, $this->_data[$name], null);
+        return new Element_Form($name, $this->_data[$name]);
     }
 
     /**
