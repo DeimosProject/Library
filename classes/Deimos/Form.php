@@ -32,17 +32,17 @@ class Element_Form
     /**
      * @var IDN
      */
-    private $_idn = null;
+    private static $_idn = null;
 
     /**
      * @var IDNA
      */
-    private $_idna2003 = null;
+    private static $_idna2003 = null;
 
     /**
      * @var IDNA
      */
-    private $_idna2008 = null;
+    private static $_idna2008 = null;
 
     /**
      * @param $name
@@ -299,19 +299,19 @@ class Element_Form
             $value = idn_to_ascii($this->value);
         }
         elseif ($idn_version == 2003) {
-            if (!$this->_idna2003)
-                $this->_idna2003 = new IDNA($options);
-            $value = $this->_idna2003->encode($this->value);
+            if (!self::$_idna2003)
+                self::$_idna2003 = new IDNA($options);
+            $value = self::$_idna2003->encode($this->value);
         }
         elseif ($idn_version == 2008) {
-            if (!$this->_idna2008)
-                $this->_idna2008 = new IDNA($options);
-            $value = $this->_idna2008->encode($this->value);
+            if (!self::$_idna2008)
+                self::$_idna2008 = new IDNA($options);
+            $value = self::$_idna2008->encode($this->value);
         }
         else {
-            if (!$this->_idn)
-                $this->_idn = new IDN();
-            $value = $this->_idn->encode($this->value);
+            if (!self::$_idn)
+                self::$_idn = new IDN();
+            $value = self::$_idn->encode($this->value);
         }
         return $value;
     }
