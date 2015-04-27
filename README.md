@@ -16,10 +16,7 @@
     if ($server_requerst == 'POST') {
 
         $form = new Form($_POST);
-
-        $form->lastname->validate_name();
-
-        if ($form->is_validate()) {
+        if ($form->is_valid()) {
             var_dump('Данные введены корректно!');
         }
         else {
