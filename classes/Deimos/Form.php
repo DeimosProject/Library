@@ -273,7 +273,9 @@ class Element_Form
 
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 
-        $phone = $phoneUtil->parse($this->value, $this->region_default);
+        $value = preg_replace('/^[\d]/', '', $this->value);
+
+        $phone = $phoneUtil->parse($value, $this->region_default);
         $get_region_code = $phoneUtil->getRegionCodeForCountryCode($phone->getCountryCode());
 
         $this->validate = $phoneUtil->isValidNumberForRegion($phone, $get_region_code);
