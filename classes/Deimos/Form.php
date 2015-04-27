@@ -10,9 +10,9 @@ class Element_Form
 {
 
     /**
-     * @var bool
+     * @var null|bool
      */
-    public $validate = true;
+    public $validate = null;
 
     /**
      * @var null|string
@@ -64,6 +64,14 @@ class Element_Form
     public function validate_numberic()
     {
         return $this->validate_number();
+    }
+
+    /**
+     * @return bool
+     */
+    public function is_valid()
+    {
+        return $this->validate !== false;
     }
 
     /**
@@ -121,6 +129,35 @@ class Element_Form
     {
         $this->validate = is_numeric($this->value);
         return $this->validate;
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     */
+    public function is_equal($value)
+    {
+        $this->validate = $this->value == $value;
+        return $this->validate;
+    }
+
+    /**
+     * @param $bool
+     * @return bool
+     */
+    public function add_condition($bool)
+    {
+        $this->validate = $this->validate && $bool;
+        return $this->validate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function validate_login()
+    {
+        $this->regexp = '/[\wа-я\dЁ.-_]+/iu';
+        return $this->validate_regexp();
     }
 
     /**
@@ -456,7 +493,7 @@ class Form
             return null;
         $valid = true;
         foreach ($this->_row as $name => $row) {
-            $valid = $valid && $row->validate;
+            $valid = $valid && $row->is_valid();
         }
         return $valid;
     }
