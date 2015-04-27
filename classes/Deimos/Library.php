@@ -11,7 +11,7 @@ class Library
         'phone' => '/[^\d]/i',
         'name' => array(
             'en' => '/[^a-z]/i',
-            'ru' => '/[^а-я]/iu'
+            'ru' => '/[^а-яё]/iu'
         )
     );
 

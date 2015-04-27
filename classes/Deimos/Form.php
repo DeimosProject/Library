@@ -73,10 +73,10 @@ class Element_Form
     {
         $bool = $this->validate_length($min, $max);
 
-        $isset_char_lower = (bool)preg_match('/[а-яa-z]/u', $this->value);
+        $isset_char_lower = (bool)preg_match('/[а-яёa-z]/u', $this->value);
         $bool = $isset_char_lower && $bool;
 
-        $isset_char_upper = (bool)preg_match('/[А-ЯA-Z]/u', $this->value);
+        $isset_char_upper = (bool)preg_match('/[А-ЯЁA-Z]/u', $this->value);
         $bool = $isset_char_upper && $bool;
 
         $isset_char_digits = (bool)preg_match('/\d/u', $this->value);
@@ -196,7 +196,7 @@ class Element_Form
         $this->value = mb_strtolower($this->value);
         $value = $this->idn_encode();
         $this->validate = (bool)filter_var($value, FILTER_VALIDATE_EMAIL);
-        if (!$this->validate && preg_match('/[а-я]+/ui', $this->value)) {
+        if (!$this->validate && preg_match('/[а-яё]+/ui', $this->value)) {
             try {
                 $value = $this->idn_encode(2003);
                 $this->validate = (bool)filter_var($value, FILTER_VALIDATE_EMAIL);
