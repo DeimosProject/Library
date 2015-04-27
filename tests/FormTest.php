@@ -1,16 +1,18 @@
 <?php
 
-include_once "../autoload.php";
+namespace tests;
+
+include_once "autoload.php";
 
 use Deimos\Form;
-use Deimos\Library;
 
-class FormTest extends PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testEmailStrNotEmpty()
     {
         $emails = array(
+            '' => false,
             'почта@привет.мир' => true,
             'maksim.babichev95@gmail.com' => true,
             'ad@spa.com' => true,
@@ -26,14 +28,8 @@ class FormTest extends PHPUnit_Framework_TestCase
         );
 
         foreach($emails as $email => $result) {
-
             $f = new Form(['email' => $email]);
-            if ($result) {
-                $this->assertTrue($f->is_valid());
-            }
-            else {
-                $this->assertFalse($f->is_valid());
-            }
+            $this->assertEquals($result, $f->is_valid());
         }
 
     }
@@ -56,9 +52,8 @@ class FormTest extends PHPUnit_Framework_TestCase
 
     public function testPhoneStrEmpty()
     {
-
-        $this->assertNotTrue(Library::is_phone(""));
-
+        $form = new Form(['phone' => '']);
+        $this->assertFalse($form->is_valid());
     }
 
 }
