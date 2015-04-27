@@ -208,8 +208,7 @@ class Element_Form
      */
     public function validate_confirm(Element_Form $element_form)
     {
-        $bool = $this->validate && $element_form->validate;
-        $this->validate = $bool && $element_form->value == $this->value;
+        $this->validate = $element_form->validate && $element_form->value == $this->value;
         return $this->validate;
     }
 
@@ -577,8 +576,6 @@ class Form
                     $_name = preg_replace('/_confirm$/', '', $name);
                     if (isset($this->_row[$_name])) {
                         $element = $this->get($_name);
-                        if (method_exists($this->get($name), 'validate_' . $_name))
-                            $this->get($name)->{'validate_' . $_name}();
                         $this->get($name)->validate_confirm($element);
                     }
                 }
