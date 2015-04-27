@@ -240,7 +240,7 @@ class Element_Form
     {
         if (!$this->validate_length())
             return $this->validate;
-        
+
         $value = preg_replace('/[^\d]/', '', $this->value);
         if (empty($value)) {
             $this->validate = false;
