@@ -240,13 +240,14 @@ class Element_Form
     {
         if (!$this->validate_length())
             return $this->validate;
+        
+        $value = preg_replace('/[^\d]/', '', $this->value);
+        if (empty($value)) {
+            $this->validate = false;
+            return $this->validate;
+        }
 
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
-
-        $value = preg_replace('/^[\d]/', '', $this->value);
-
-        var_dump($value);die;
-        
         $phone = $phoneUtil->parse($value, $this->region_default);
         $get_region_code = $phoneUtil->getRegionCodeForCountryCode($phone->getCountryCode());
 
