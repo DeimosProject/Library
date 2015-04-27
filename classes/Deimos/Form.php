@@ -45,6 +45,16 @@ class Element_Form
     private static $_idna2008 = null;
 
     /**
+     * @var array
+     */
+    private $_messages = array();
+
+    /**
+     * @var string
+     */
+    private $_css = '';
+
+    /**
      * @param $name
      * @param $data
      */
@@ -72,6 +82,79 @@ class Element_Form
     public function is_valid()
     {
         return $this->validate !== false;
+    }
+
+    public function get_css_class()
+    {
+        if (is_null($this->validate)) {
+            return $this->_css['is_null'];
+        }
+        elseif ($this->validate) {
+            return $this->_css['is_valid'];
+        }
+        else {
+            return $this->_css['is_not_valid'];
+        }
+    }
+
+    /**
+     * @param string $class
+     * @param null $type
+     * @return bool
+     */
+    public function add_css_class($class = 'has-error', $type = null)
+    {
+        if (is_null($type)) {
+            $this->_css['is_null'] = $class;
+            return true;
+        }
+        elseif ($type === true) {
+            $this->_css['is_valid'] = $class;
+            return true;
+        }
+        elseif ($type === false) {
+            $this->_css['is_not_valid'] = $class;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $msg
+     * @param null $type
+     * @return bool
+     */
+    public function add_message($msg, $type = null)
+    {
+        if (is_null($type)) {
+            $this->_messages['is_null'] = $msg;
+            return true;
+        }
+        elseif ($type === true) {
+            $this->_messages['is_valid'] = $msg;
+            return true;
+        }
+        elseif ($type === false) {
+            $this->_messages['is_not_valid'] = $msg;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function get_message()
+    {
+        if (is_null($this->validate)) {
+            return $this->_messages['is_null'];
+        }
+        elseif ($this->validate) {
+            return $this->_messages['is_valid'];
+        }
+        else {
+            return $this->_messages['is_not_valid'];
+        }
     }
 
     /**
@@ -147,6 +230,9 @@ class Element_Form
      */
     public function check_captcha($value)
     {
+        if (!$this->validate_length())
+            return $this->validate;
+
         if (is_string($this->value)) {
             $this->validate = mb_strtolower($this->value) === mb_strtolower($value);
         }
