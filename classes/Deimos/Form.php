@@ -142,6 +142,21 @@ class Element_Form
     }
 
     /**
+     * @param $value
+     * @return bool|null|string
+     */
+    public function check_captcha($value)
+    {
+        if (is_string($this->value)) {
+            $this->validate = mb_strtolower($this->value) === mb_strtolower($value);
+        }
+        else {
+            $this->validate = false;
+        }
+        return $this->validate;
+    }
+
+    /**
      * @param $bool
      * @return bool
      */
