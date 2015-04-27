@@ -292,7 +292,7 @@ class Element_Form
      */
     private function idn_encode($idn_version = null)
     {
-        $options = array('options' => array('idn_version' => $idn_version));
+        $options = array('idn_version' => $idn_version);
         if ($idn_version && !in_array($idn_version, array(2003, 2008)))
             return $this->value;
         if (extension_loaded('intl')) {
