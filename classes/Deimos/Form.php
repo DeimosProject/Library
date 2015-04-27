@@ -30,6 +30,11 @@ class Element_Form
     public $regexp = null;
 
     /**
+     * @var string
+     */
+    public $region_default = 'RU';
+
+    /**
      * @var IDN
      */
     private static $_idn = null;
@@ -266,12 +271,16 @@ class Element_Form
         if (!$this->validate_length())
             return $this->validate;
 
-        $this->validate = Library::is_phone($this->value);
+        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+
+        $phone = $phoneUtil->parse($this->value, $this->region_default);
+        $get_region_code = $phoneUtil->getRegionCodeForCountryCode($phone->getCountryCode());
+
+        $this->validate = $phoneUtil->isValidNumberForRegion($phone, $get_region_code);
+
         if ($this->validate) {
-            $this->value = Library::phone($this->value);
+            $this->value = $phone->getCountryCode() . $phone->getNationalNumber();
         }
-        else if ($msg_error != null)
-            $this->msg_error = $msg_error;
 
         return $this->validate;
     }
