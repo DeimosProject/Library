@@ -6,3 +6,8 @@ function __autoload($class)
     $path = str_replace('\\', '/', $path);
     include_once $path;
 }
+
+class autoload
+{
+
+}
