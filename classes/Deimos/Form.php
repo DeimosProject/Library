@@ -35,6 +35,16 @@ class Element_Form
     private $_idn = null;
 
     /**
+     * @var IDNA
+     */
+    private $_idna2003 = null;
+
+    /**
+     * @var IDNA
+     */
+    private $_idna2008 = null;
+
+    /**
      * @param $name
      * @param $data
      */
@@ -184,10 +194,22 @@ class Element_Form
             return $this->validate;
 
         $this->value = mb_strtolower($this->value);
-
         $value = $this->idn_encode();
-
         $this->validate = (bool)filter_var($value, FILTER_VALIDATE_EMAIL);
+        if (!$this->validate && preg_match('/[а-я]+/ui', $this->value)) {
+            try {
+                $value = $this->idn_encode(2003);
+                $this->validate = (bool)filter_var($value, FILTER_VALIDATE_EMAIL);
+                if (!$this->validate) {
+                    $value = $this->idn_encode(2008);
+                    $this->validate = (bool)filter_var($value, FILTER_VALIDATE_EMAIL);
+                }
+            }
+            catch (\Exception $e) {
+                $this->validate = false;
+            }
+        }
+
         if (!$this->validate && $msg_error != null)
             $this->msg_error = $msg_error;
 
@@ -268,14 +290,27 @@ class Element_Form
     /**
      * @return string
      */
-    private function idn_encode()
+    private function idn_encode($idn_version = null)
     {
+        $options = array('options' => array('idn_version' => $idn_version));
+        if ($idn_version && !in_array($idn_version, array(2003, 2008)))
+            return $this->value;
         if (extension_loaded('intl')) {
             $value = idn_to_ascii($this->value);
         }
+        elseif ($idn_version == 2003) {
+            if (!$this->_idna2003)
+                $this->_idna2003 = new IDNA($options);
+            $value = $this->_idna2003->encode($this->value);
+        }
+        elseif ($idn_version == 2008) {
+            if (!$this->_idna2008)
+                $this->_idna2008 = new IDNA($options);
+            $value = $this->_idna2008->encode($this->value);
+        }
         else {
             if (!$this->_idn)
-                $this->_idn = new IDN(mb_internal_encoding());
+                $this->_idn = new IDN();
             $value = $this->_idn->encode($this->value);
         }
         return $value;
