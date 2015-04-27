@@ -577,6 +577,8 @@ class Form
                     $_name = preg_replace('/_confirm$/', '', $name);
                     if (isset($this->_row[$_name])) {
                         $element = $this->get($_name);
+                        if (method_exists($this->get($name), 'validate_' . $_name))
+                            $this->get($name)->{'validate_' . $_name}();
                         $this->get($name)->validate_confirm($element);
                     }
                 }
