@@ -254,7 +254,13 @@ class Element_Form
         $this->validate = $phoneUtil->isValidNumberForRegion($phone, $get_region_code);
 
         if ($this->validate) {
-            $this->value = $phone->getCountryCode() . $phone->getNationalNumber();
+            $value = $phone->getNationalNumber();
+            if (strtoupper($this->region_default) == 'RU' && strlen($value) == 10) {
+                $this->value = $phone->getCountryCode() . $value;
+            }
+            else {
+                $this->value = $value;
+            }
         }
 
         return $this->validate;
