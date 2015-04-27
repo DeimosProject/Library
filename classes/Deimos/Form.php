@@ -152,13 +152,18 @@ class Element_Form
         if (is_string($this->value))
             $this->value = trim($this->value);
 
-        $bool = !empty($this->value);
-        $length = mb_strlen($this->value);
+        $this->validate = is_string($this->value) && !empty($this->value);
+        if ($this->validate) {
 
-        if (is_numeric($max))
-            $bool = $length <= $max;
+            $length = mb_strlen($this->value);
 
-        $this->validate = $length >= $min && $bool;
+            if (is_numeric($max))
+                $this->validate = $length <= $max;
+
+            $this->validate = $this->validate && $length >= $min;
+
+        }
+
         return $this->validate;
     }
 
@@ -324,14 +329,26 @@ class Element_Form
         $value = parse_url($this->value);
         $this->validate = $value !== null;
         if ($this->validate) {
+            $save_value = $this->value;
             if (isset($value['scheme'])) {
-                $this->value = $value['host'];
+                if ($this->validate_url()) {
+                    $this->value = $value['host'];
+                }
+                else {
+                    $this->value = $save_value;
+                }
             }
             else {
-                $value = parse_url('http://' . $value['path']);
-                $this->validate = $value !== null && isset($value['host']);
-                if ($this->validate)
-                    $this->value = $value['host'];
+                $this->value = parse_url('http://' . $value['path']);
+                if ($this->validate_url()) {
+                    $this->validate = $value !== null && isset($value['host']);
+                    if ($this->validate)
+                        $this->value = $value['host'];
+
+                }
+                else {
+                    $this->value = $save_value;
+                }
             }
         }
         return $this->validate;
