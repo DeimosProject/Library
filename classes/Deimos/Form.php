@@ -27,7 +27,7 @@ class Element_Form
     /**
      * @var string
      */
-    public $region_default = 'RU';
+    public $region_default;
 
     /**
      * @var IDN
@@ -48,9 +48,11 @@ class Element_Form
      * @param $name
      * @param $data
      */
-    public function __construct($name, $data)
+    public function __construct($name, $data, $region_default = 'RU')
     {
         $this->value = $data;
+
+        $this->region_default = $region_default;
 
         if (method_exists($this, 'validate_' . $name))
             $this->{'validate_' . $name}();
