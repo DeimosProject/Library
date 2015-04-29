@@ -7,21 +7,14 @@ class Library
 
     protected static $_cache = array();
 
-    private static $regxs = array(
-        'name' => array(
-            'en' => '/[^a-z]/i',
-            'ru' => '/[^а-яё]/iu'
-        )
-    );
-
     public static function is_lang_ru($string)
     {
-        return (bool)preg_match(self::$regxs['name']['ru'], $string);
+        return (bool)preg_match('/[а-яё]/iu', $string);
     }
 
     public static function is_lang_en($string)
     {
-        return (bool)preg_match(self::$regxs['name']['en'], $string);
+        return (bool)preg_match('/[a-z]/i', $string);
     }
 
     public static function is_name($string)
