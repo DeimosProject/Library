@@ -208,7 +208,7 @@ class Element_Form
      */
     public function validate_confirm(Element_Form $element_form)
     {
-        $this->validate = $element_form->validate && $element_form->value == $this->value;
+        $this->validate = $element_form->value == $this->value;
         return $this->validate;
     }
 
